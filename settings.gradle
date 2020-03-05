@@ -1,0 +1,3 @@
+rootProject.name='ObjTran'
+include ':app'
+include ':ObjTranLib'
