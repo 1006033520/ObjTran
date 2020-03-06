@@ -1,6 +1,7 @@
 package fb.util.transformation
 
 import fb.util.transformation.adapter.DefAdapter
+import fb.util.transformation.adapter.`object`.CreateObject
 import fb.util.transformation.adapter.`object`.ObjectAdapter
 import fb.util.transformation.adapter.array.ArrayAdapter
 import fb.util.transformation.adapter.boolean.BooleanAdapter
@@ -39,16 +40,7 @@ class ObjTran {
         createAdapterInterFaces.add(ArrayAdapter(this))
         createAdapterInterFaces.add(ObjectAdapter(this))
 
-        createObjInterFaces.add(object : CreateObjInterFace {
-            override fun createObj(c: Class<out Any>): Any? {
-                return try {
-                    c.newInstance()
-                } catch (e: Exception) {
-                    null
-                }
-            }
-
-        })
+        createObjInterFaces.add(CreateObject(this))
     }
 
     fun inObject(vararg objs: Any): ObjTran {
