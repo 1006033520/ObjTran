@@ -4,8 +4,13 @@ import fb.util.transformation.adapter.DefAdapter
 import fb.util.transformation.adapter.`object`.ObjectAdapter
 import fb.util.transformation.adapter.array.ArrayAdapter
 import fb.util.transformation.adapter.boolean.BooleanAdapter
+import fb.util.transformation.adapter.byte.ByteAdapter
+import fb.util.transformation.adapter.char.CharAdapter
+import fb.util.transformation.adapter.double.DoubleAdapter
+import fb.util.transformation.adapter.float.FloatAdapter
 import fb.util.transformation.adapter.int.IntAdapter
 import fb.util.transformation.adapter.long.LongAdapter
+import fb.util.transformation.adapter.short.ShortAdapter
 import fb.util.transformation.adapter.string.StringAdapter
 import java.lang.Exception
 
@@ -21,6 +26,12 @@ class ObjTran {
     private var outField: TField? = null
 
     init {
+        createAdapterInterFaces.add(ShortAdapter())
+        createAdapterInterFaces.add(FloatAdapter())
+        createAdapterInterFaces.add(DoubleAdapter())
+        createAdapterInterFaces.add(CharAdapter())
+        createAdapterInterFaces.add(ByteAdapter())
+        createAdapterInterFaces.add(BooleanAdapter())
         createAdapterInterFaces.add(LongAdapter())
         createAdapterInterFaces.add(BooleanAdapter())
         createAdapterInterFaces.add(IntAdapter())
