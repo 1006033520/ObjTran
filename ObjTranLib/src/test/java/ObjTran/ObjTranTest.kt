@@ -15,7 +15,6 @@ class ObjTranTest{
         var b1:Int = 0
     }
     data class C<A,B>(
-        @SerializedName("aaa")
         val c1:A,
         val c2:B
     )
@@ -40,6 +39,29 @@ class ObjTranTest{
         ObjTran().inObject(a).toObjects(aa).exec()
         println("${aa.a1?.b1} ${aa.a2?.c1} ${aa.a2?.c2}")
         assert(a.a1 == aa.a1 && a.a2.c1 == aa.a2?.c1 && a.a2.c2 == aa.a2.c2)
+    }
+
+    class S{
+        @SerializedName("s1")
+        var abc =0
+    }
+    class SS{
+        val s1 = 0
+    }
+    class SSS{
+        @SerializedName("s1")
+        val abd = 0
+    }
+
+    @Test
+    fun serializedName(){
+        val s = S()
+        s.abc = 111
+        val ss = SS()
+        val sss = SSS()
+        ObjTran().inObject(s).toObjects(ss,sss).exec()
+        println("${ss.s1} ${sss.abd}")
+        assert("111 111" == "${ss.s1} ${sss.abd}")
     }
 
 }

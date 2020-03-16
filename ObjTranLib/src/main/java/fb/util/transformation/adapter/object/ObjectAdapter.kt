@@ -1,5 +1,6 @@
 package fb.util.transformation.adapter.`object`
 
+import com.google.gson.annotations.SerializedName
 import fb.util.transformation.*
 import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
@@ -7,12 +8,12 @@ import java.lang.reflect.ParameterizedType
 /**
  * object适配器
  */
-class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
+open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
     override fun createRead(field: TField): ReadFieldInterFace? {
         return Read(context, field)
     }
 
-    class Read(val context: ObjTran, val filed: TField) : ReadFieldInterFace {
+    open class Read(val context: ObjTran, val filed: TField) : ReadFieldInterFace {
         override fun read(list: ArrayList<TField>) {
             filed.type.declaredFields.forEach { jfiled ->
                 jfiled.isAccessible = true
@@ -26,18 +27,18 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
                         key = jfiled.name,
                         type = value?.javaClass ?: {
                             var type = jfiled.type
-                            if (filed is ObjectField && filed.genericTypes != null){
+                            if (filed is ObjectField && filed.genericTypes != null) {
                                 val t = filed.genericTypes[jfiled.genericType.typeName]
-                                type = t?:jfiled.type
+                                type = t ?: jfiled.type
                             }
                             type as Class<out Any>
                         }(),
                         value = value,
                         field = jfiled,
                         genericTypes = {
-                            var hashMap:HashMap<String,Class<out Any>>? = null
+                            var hashMap: HashMap<String, Class<out Any>>? = null
                             val genericType = jfiled.genericType
-                            if (genericType is ParameterizedType){
+                            if (genericType is ParameterizedType) {
                                 hashMap = HashMap()
                                 genericType.actualTypeArguments.forEachIndexed { index, type ->
                                     val key = jfiled.type.typeParameters[index]
@@ -46,7 +47,8 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
                                 }
                             }
                             hashMap
-                        }()
+                        }(),
+                        annotations = jfiled.annotations
                     )
                 )
             }
@@ -58,7 +60,7 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
         return Write(outField)
     }
 
-    class Write(filed: TField) : BaseWrite(filed) {
+    open class Write(filed: TField) : BaseWrite(filed) {
         override fun merge(inField: TField) {
             if (filed.type == inField.type && filed.value == null) {
                 filed.value = inField.value
@@ -87,14 +89,34 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
     /**
      * @param genericTypes 泛型对照
      */
-    class ObjectField(
+    open class ObjectField(
         context: ObjTran,
         key: String? = null,
         value: Any? = null,
         type: Class<out Any>,
         val field: Field,
-        val genericTypes:HashMap<String,Class<out Any>>? = null
+        val genericTypes: HashMap<String, Class<out Any>>? = null,
+        var annotations: Array<Annotation>
     ) : TField(context, key, value, type) {
+        var alternate: Array<String>? = null
+
+        init {
+            serializedName()
+        }
+
+        private fun serializedName(){
+            try {
+                val serializedName = field.getAnnotation(SerializedName::class.java)
+                if (serializedName != null) {
+                    alternate = serializedName.alternate
+                    super.key = serializedName.value
+                }
+            }catch (e:ClassNotFoundException){
+
+            }
+
+        }
+
         override fun merge(inField: TField) {
             super.merge(inField)
             isValue = true
