@@ -19,7 +19,7 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
                     ObjectField(
                         context,
                         key = jfiled.name,
-                        type = value?.javaClass?:jfiled.type,
+                        type = value?.javaClass ?: jfiled.type,
                         value = value,
                         field = jfiled
                     )
@@ -45,7 +45,7 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
 
         override fun write() {
             filed.childs.forEach {
-                val objectField = it as ObjectField
+                it as ObjectField
                 if (it.isValue) {
                     if (it.value == null && it.childs.size != 0) {
                         it.value = filed.context.createObj(it.type)
