@@ -1,6 +1,6 @@
 package fb.util.transformation
 
 interface WriteFieldInterFace {
-    fun assignment(inField:TField)
+    fun merge(inField:TField)
     fun write()
 }

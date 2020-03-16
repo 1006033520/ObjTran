@@ -19,7 +19,7 @@ class StringAdapter : BaseAdapter() {
 
     override fun write(field: TField): WriteFieldInterFace {
         return object : WriteFieldInterFace {
-            override fun assignment(inField: TField) {
+            override fun merge(inField: TField) {
                 if (isType(inField)) {
                     if (inField.type == String::class.java)
                         field.value = inField.value

@@ -11,7 +11,7 @@ class DefAdapter : CreateReadFieldInterFace,CreateWriteFieldInterFace {
             }
         }
         val write = object :WriteFieldInterFace{
-            override fun assignment(inField: TField) {
+            override fun merge(inField: TField) {
 
             }
 

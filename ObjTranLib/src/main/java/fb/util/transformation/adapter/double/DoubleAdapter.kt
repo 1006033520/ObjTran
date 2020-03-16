@@ -23,7 +23,7 @@ class DoubleAdapter :BaseAdapter(){
 
     override fun write(field: TField): WriteFieldInterFace {
         return object : BaseWrite(field){
-            override fun assignment(inField: TField) {
+            override fun merge(inField: TField) {
                 if (isType(inField))
                     field.value = inField.value
             }

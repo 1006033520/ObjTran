@@ -8,7 +8,7 @@ abstract class BaseWrite (protected val filed:TField): WriteFieldInterFace {
         filed.childs.forEach { child ->
             inField.childs.forEach { `in` ->
                 if (child.equal(`in`))
-                    child.assignment(`in`)
+                    child.merge(`in`)
             }
         }
     }

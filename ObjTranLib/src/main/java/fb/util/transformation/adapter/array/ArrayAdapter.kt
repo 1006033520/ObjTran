@@ -34,7 +34,7 @@ class ArrayAdapter(val context: ObjTran) : AdapterInterFace {
     }
 
     class Write(val field: TField) : BaseWrite(field) {
-        override fun assignment(inField: TField) {
+        override fun merge(inField: TField) {
             next(inField)
         }
 

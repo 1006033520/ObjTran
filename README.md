@@ -1,9 +1,73 @@
 # ObjTran 类型转换库
-1. 使用
 
-   ```kotlin
-   
-   ```
+objTran是类型转换   暂时未完成
 
-   
+使用方式：
+
+```kotlin
+data class A<T>(
+    var a1: String?,
+    var a2: Boolean?,
+    var a3: Int?,
+    var a4: T?,
+    var a5: D?
+)
+data class D(
+    var a1: Int
+)
+data class B(
+    var a1: String?,
+    var a2: Boolean?,
+    var a3: Int?,
+    val a4: Int,
+  	val a5:E? = null
+)
+class E {
+    var a1: Int = 0
+}
+fun main() {
+  val a = A("123", false, null, 20, D(60))
+  val a2 = A(null, true, 10, null, null)
+  val b = B(null, null, 0, 0)
+  objTran().inObject(a,a2).toObjects(b).exec()
+}
+```
+
+特性：
+
+ 1. 支持多对多
+
+ 2. 在原有数据覆盖
+
+    列如:
+
+    ```kotlin
+    data class A(
+        var a1: String?,
+        var a2: String?
+    )
+    data class B(
+        var a1: String?,
+        var a2: String?
+    )
+    fun main(){
+      val a = A("123",null)
+      val b = B(null,"456")
+      objTran().inObject(a).toObjects(b).exec()
+      println("${b.a1} ${b.a2}")
+    }
+    输出：123 456
+    ```
+
+即将支持：
+
+ 	1. 泛型
+ 	2. map
+ 	3. array
+ 	4. json
+ 	5. android （intent、Budle、ContentProvider）
+ 	6. date
+ 	7. string格式化（时间、日期、等自定义）
+ 	8. 类型转换器（date<->String,date<->Long,String<->Int、等等）
+ 	9. xml
 

@@ -13,7 +13,6 @@ import fb.util.transformation.adapter.int.IntAdapter
 import fb.util.transformation.adapter.long.LongAdapter
 import fb.util.transformation.adapter.short.ShortAdapter
 import fb.util.transformation.adapter.string.StringAdapter
-import java.lang.Exception
 
 class ObjTran {
 
@@ -69,7 +68,7 @@ class ObjTran {
     }
 
     private fun exec(inField: TField, outField: TField) {
-        outField.assignment(inField)
+        outField.merge(inField)
         outField.write()
     }
 

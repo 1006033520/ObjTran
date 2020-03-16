@@ -2,7 +2,11 @@ package fb.util.transformation.adapter.`object`
 
 import fb.util.transformation.*
 import java.lang.reflect.Field
+import java.lang.reflect.ParameterizedType
 
+/**
+ * object适配器
+ */
 class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
     override fun createRead(field: TField): ReadFieldInterFace? {
         return Read(context, field)
@@ -15,13 +19,34 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
                 val value = filed.value?.let {
                     jfiled.get(it)
                 }
+
                 list.add(
                     ObjectField(
                         context,
                         key = jfiled.name,
-                        type = value?.javaClass ?: jfiled.type,
+                        type = value?.javaClass ?: {
+                            var type = jfiled.type
+                            if (filed is ObjectField && filed.genericTypes != null){
+                                val t = filed.genericTypes[jfiled.genericType.typeName]
+                                type = t?:jfiled.type
+                            }
+                            type as Class<out Any>
+                        }(),
                         value = value,
-                        field = jfiled
+                        field = jfiled,
+                        genericTypes = {
+                            var hashMap:HashMap<String,Class<out Any>>? = null
+                            val genericType = jfiled.genericType
+                            if (genericType is ParameterizedType){
+                                hashMap = HashMap()
+                                genericType.actualTypeArguments.forEachIndexed { index, type ->
+                                    val key = jfiled.type.typeParameters[index]
+                                    type as Class<out Any>
+                                    hashMap[key.name] = type
+                                }
+                            }
+                            hashMap
+                        }()
                     )
                 )
             }
@@ -34,7 +59,7 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
     }
 
     class Write(filed: TField) : BaseWrite(filed) {
-        override fun assignment(inField: TField) {
+        override fun merge(inField: TField) {
             if (filed.type == inField.type && filed.value == null) {
                 filed.value = inField.value
             } else {
@@ -59,17 +84,20 @@ class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
         }
     }
 
+    /**
+     * @param genericTypes 泛型对照
+     */
     class ObjectField(
         context: ObjTran,
         key: String? = null,
         value: Any? = null,
         type: Class<out Any>,
-        val field: Field
+        val field: Field,
+        val genericTypes:HashMap<String,Class<out Any>>? = null
     ) : TField(context, key, value, type) {
-        override fun assignment(inField: TField) {
-            super.assignment(inField)
+        override fun merge(inField: TField) {
+            super.merge(inField)
             isValue = true
         }
     }
-
 }
