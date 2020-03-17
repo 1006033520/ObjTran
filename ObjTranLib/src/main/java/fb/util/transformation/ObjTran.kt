@@ -39,7 +39,7 @@ class ObjTran {
         createAdapterInterFaces.add(ArrayAdapter(this))
         createAdapterInterFaces.add(ObjectAdapter(this))
 
-        createObjInterFaces.add(CreateObject(this))
+        createObjInterFaces.add(CreateObject())
     }
 
     fun inObject(vararg objs: Any): ObjTran {
