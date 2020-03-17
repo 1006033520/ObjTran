@@ -1,4 +1,20 @@
-# ObjTran 类型转换库
+# ObjTran 类型转换库[![](.README.assets/ObjTran.svg)](https://jitpack.io/#1006033520/ObjTran)
+
+```groovy
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+
+dependencies {
+	        implementation 'com.github.1006033520:ObjTran:v1.0-alpha02'
+	}
+```
+
+
 
 objTran是类型转换   暂时未完成
 
