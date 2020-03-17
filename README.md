@@ -16,7 +16,9 @@ dependencies {
 
 
 
-objTran是类型转换   暂时未完成
+objTran是类型转换 
+
+使用kotlin编写  有兴趣的可以转成java
 
 使用方式：
 
