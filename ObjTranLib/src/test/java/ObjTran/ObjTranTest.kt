@@ -80,12 +80,6 @@ class ObjTranTest {
     fun createObject() {
         val c = CreateObject().createObj(CreateObjectTestBean::class.java)
         c as CreateObjectTestBean
-        println(c.a)
-        println(c.b)
-        println(c.d)
-
-//        val c1 = Gson().fromJson("{}", CreateObjectTestBean::class.java)
-//        println(c1.d)
     }
 
 }
