@@ -48,7 +48,7 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
                             }
                             hashMap
                         }(),
-                        annotations = jfiled.annotations
+                        annotations = jfiled.declaredAnnotations
                     )
                 )
             }
