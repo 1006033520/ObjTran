@@ -2,6 +2,9 @@ package fb.util.transformation.adapter.array
 
 import fb.util.transformation.*
 
+/**
+ * 数组类型适配器
+ */
 class ArrayAdapter(val context: ObjTran) : AdapterInterFace {
     override fun createRead(field: TField): ReadFieldInterFace? {
         if (field.type.isArray)
@@ -11,11 +14,11 @@ class ArrayAdapter(val context: ObjTran) : AdapterInterFace {
 
     class Read(val context: ObjTran, val field: TField) : ReadFieldInterFace {
         override fun read(list: ArrayList<TField>) {
-            var readType:ReadType = ReadType.KEY_NUMBER
-            if (field is ArrayField){
+            var readType:ReadType = ReadType.KEY_NUMBER //默认读取类型key namber
+            if (field is ArrayField){ //判断是否代理类 是则获取读取类型
                 readType = field.readType
             }
-
+            //读取内容赋值于子项
             field.value?.also { v ->
                 val length = java.lang.reflect.Array.getLength(v)
                 for (i in 0 until length) {
@@ -81,11 +84,17 @@ class ArrayAdapter(val context: ObjTran) : AdapterInterFace {
 
     }
 
+    /**
+     * 数据读取类型
+     */
     enum class ReadType{
-        KEY_NUMBER,
-        KEY_NULL
+        KEY_NUMBER,//子项key值是按数组顺序赋值 0、1、2、3...
+        KEY_NULL//子项key值统一为null
     }
 
-    class ArrayField(private val tField: TField,val readType:ReadType):TField(tField.context,tField.key,tField.value,tField.type)
+    /**
+     * 代理 fgield 添加readType
+     */
+    class ArrayField(tField: TField, val readType:ReadType):TField(tField.context,tField.key,tField.value,tField.type)
 
 }
