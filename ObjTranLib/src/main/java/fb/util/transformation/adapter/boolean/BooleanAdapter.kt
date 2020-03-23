@@ -1,5 +1,6 @@
 package fb.util.transformation.adapter.boolean
 
+import fb.util.transformation.BaseWrite
 import fb.util.transformation.type.Types
 import fb.util.transformation.ReadFieldInterFace
 import fb.util.transformation.TField
@@ -20,7 +21,7 @@ class BooleanAdapter:BaseAdapter() {
     }
 
     override fun write(field: TField): WriteFieldInterFace {
-        return object :WriteFieldInterFace{
+        return object :BaseWrite(field){
             override fun merge(inField: TField) {
                 if (isType(inField))
                     field.value = inField.value

@@ -22,12 +22,12 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
                 }
 
                 list.add(
-                    ObjectField(
+                    ObjectChildField(
                         context,
                         key = jfiled.name,
                         type = value?.javaClass ?: {
                             var type = jfiled.type
-                            if (filed is ObjectField && filed.genericTypes != null) {
+                            if (filed is ObjectChildField && filed.genericTypes != null) {
                                 val t = filed.genericTypes[jfiled.genericType.typeName]
                                 type = t ?: jfiled.type
                             }
@@ -61,6 +61,8 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
     }
 
     open class Write(filed: TField) : BaseWrite(filed) {
+        val createObject by lazy { CreateObject() }
+
         override fun merge(inField: TField) {
             if (filed.type == inField.type && filed.value == null) {
                 filed.value = inField.value
@@ -70,17 +72,17 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
 
         }
 
+        override fun create() {
+            filed.value = createObject.createObj(filed.type)
+        }
+
         override fun write() {
             filed.childs.forEach {
-                it as ObjectField
+                it as ObjectChildField
                 if (it.isValue) {
-                    if (it.value == null && it.childs.size != 0) {
-                        it.value = filed.context.createObj(it.type)
-                    }
-                    if (it.value != null) {
+                    it.write()
+                    if (it.value != null)
                         it.field.set(filed.value, it.value)
-                        it.write()
-                    }
                 }
             }
         }
@@ -89,7 +91,7 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
     /**
      * @param genericTypes 泛型对照
      */
-    open class ObjectField(
+    open class ObjectChildField(
         context: ObjTran,
         key: String? = null,
         value: Any? = null,
@@ -104,14 +106,14 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
             serializedName()
         }
 
-        private fun serializedName(){
+        private fun serializedName() {
             try {
                 val serializedName = field.getAnnotation(SerializedName::class.java)
                 if (serializedName != null) {
                     alternate = serializedName.alternate
                     super.key = serializedName.value
                 }
-            }catch (e:ClassNotFoundException){
+            } catch (e: ClassNotFoundException) {
 
             }
 

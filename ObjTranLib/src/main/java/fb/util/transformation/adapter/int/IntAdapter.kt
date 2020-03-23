@@ -1,5 +1,6 @@
 package fb.util.transformation.adapter.int
 
+import fb.util.transformation.BaseWrite
 import fb.util.transformation.ReadFieldInterFace
 import fb.util.transformation.TField
 import fb.util.transformation.type.Types
@@ -20,7 +21,7 @@ class IntAdapter : BaseAdapter() {
     }
 
     override fun write(field: TField): WriteFieldInterFace {
-        return object : WriteFieldInterFace {
+        return object : BaseWrite(field) {
             override fun merge(inField: TField) {
                 if (isType(inField)) {
                     field.value = inField.value

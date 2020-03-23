@@ -3,7 +3,9 @@ package ObjTran
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import fb.util.transformation.ObjTran
+import fb.util.transformation.TField
 import fb.util.transformation.adapter.`object`.CreateObject
+import fb.util.transformation.adapter.map.MapAdapter
 import org.junit.Test
 
 class ObjTranTest {
@@ -80,6 +82,29 @@ class ObjTranTest {
     fun createObject() {
         val c = CreateObject().createObj(CreateObjectTestBean::class.java)
         c as CreateObjectTestBean
+    }
+
+    @Test
+    fun isMap(){
+        val mapAdapter = MapAdapter()
+        val hashMap = HashMap<Int,Int>()
+        val tField = TField(ObjTran(),type = hashMap::class.java)
+        assert(mapAdapter.isType(tField))
+    }
+
+    @Test
+    fun array(){
+        data class A(
+            val a1:IntArray
+        )
+         class B {
+            var a1: IntArray? = null
+        }
+        val a = A(intArrayOf(1,2,3,4,5))
+        val b = B()
+        ObjTran().inObject(a).toObjects(b).exec()
+        println("${b.a1?.get(2)}")
+
     }
 
 }

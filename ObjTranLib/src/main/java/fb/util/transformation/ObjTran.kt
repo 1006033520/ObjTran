@@ -19,8 +19,6 @@ class ObjTran {
     //    val createReadFieldInterFaces = ArrayList<CreateReadFieldInterFace>()
 //    val createWriteFieldInterFaces = ArrayList<CreateWriteFieldInterFace>()
     private val createAdapterInterFaces = ArrayList<AdapterInterFace>()
-    private val createObjInterFaces = ArrayList<CreateObjInterFace>()
-    private val afterReadings = ArrayList<AfterReading>()
 
     private var inField: TField? = null
     private var outField: TField? = null
@@ -39,24 +37,25 @@ class ObjTran {
         createAdapterInterFaces.add(ArrayAdapter(this))
         createAdapterInterFaces.add(ObjectAdapter(this))
 
-        createObjInterFaces.add(CreateObject())
     }
 
     fun inObject(vararg objs: Any): ObjTran {
-        inField = TField(
-            this,
-            value = objs,
-            type = objs::class.java
+        inField = ArrayAdapter.ArrayField(
+            TField(
+                this,
+                value = objs,
+                type = objs::class.java
+            ), ArrayAdapter.ReadType.KEY_NULL
         )
         return this
     }
 
     fun toObjects(vararg objs: Any): ObjTran {
-        outField = TField(
+        outField = ArrayAdapter.ArrayField(TField(
             this,
             value = objs,
             type = objs::class.java
-        )
+        ),ArrayAdapter.ReadType.KEY_NULL)
         return this
     }
 
@@ -72,7 +71,7 @@ class ObjTran {
         outField.write()
     }
 
-    internal fun read(field: TField):ReadFieldInterFace {
+    internal fun read(field: TField): ReadFieldInterFace {
         createAdapterInterFaces.forEach {
             val r = it.createRead(field)
             if (r != null)
@@ -81,7 +80,7 @@ class ObjTran {
         return DefAdapter.read
     }
 
-    internal fun findCreateWrite(field: TField):WriteFieldInterFace {
+    internal fun findCreateWrite(field: TField): WriteFieldInterFace {
         createAdapterInterFaces.forEach {
             val w = it.createWrite(field)
             if (w != null)
@@ -89,15 +88,5 @@ class ObjTran {
         }
         return DefAdapter.write
     }
-
-    internal fun createObj(c: Class<out Any>): Any? {
-        createObjInterFaces.forEach {
-            val obj = it.createObj(c)
-            if (obj != null)
-                return obj
-        }
-        return null
-    }
-
 
 }

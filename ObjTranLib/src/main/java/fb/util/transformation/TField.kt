@@ -35,7 +35,7 @@ open class TField(
     /**
      * @param list 对比工具列表
      */
-    protected open fun setFieldEqual(list:ArrayList<FieldEqual>){
+    protected open fun setFieldEqual(list: ArrayList<FieldEqual>) {
         list.add(Equal.defEqual)
     }
 
@@ -63,6 +63,10 @@ open class TField(
         return false
     }
 
+    open operator fun get(key: String?): TField? {
+        return childs.findLast { it.key == key }
+    }
+
     /**
      * 读取
      * 从字段中读取内容或者子项
@@ -83,12 +87,18 @@ open class TField(
         write.merge(inField)
     }
 
+    override fun create() {
+        if (value == null && childs.isNotEmpty())
+            write.create()
+    }
+
     /**
      * 写入
      * 把最终结果写入对应obj
      * 核心步骤3
      */
     override fun write() {
+        create()
         write.write()
     }
 }

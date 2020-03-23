@@ -14,4 +14,7 @@ abstract class BaseWrite (protected val filed:TField): WriteFieldInterFace {
             }
         }
     }
+
+    override fun create() {
+    }
 }
