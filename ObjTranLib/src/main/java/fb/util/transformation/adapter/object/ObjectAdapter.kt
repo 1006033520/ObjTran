@@ -47,8 +47,7 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
                                 }
                             }
                             hashMap
-                        }(),
-                        annotations = jfiled.declaredAnnotations
+                        }()
                     )
                 )
             }
@@ -97,8 +96,7 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
         value: Any? = null,
         type: Class<out Any>,
         val field: Field,
-        val genericTypes: HashMap<String, Class<out Any>>? = null,
-        var annotations: Array<Annotation>
+        val genericTypes: HashMap<String, Class<out Any>>? = null
     ) : TField(context, key, value, type) {
         var alternate: Array<String>? = null
 
