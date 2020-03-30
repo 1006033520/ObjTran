@@ -15,6 +15,10 @@ class DefAdapter : CreateReadFieldInterFace,CreateWriteFieldInterFace {
 
             }
 
+            override fun create() {
+
+            }
+
             override fun write() {
 
             }
