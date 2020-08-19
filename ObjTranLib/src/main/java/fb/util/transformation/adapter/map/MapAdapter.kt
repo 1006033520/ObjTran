@@ -37,7 +37,7 @@ class MapAdapter : BaseAdapter() {
                     filed.value = inField.value
                 } else if (field.value != null){
                     inField.childs.forEach {
-                        val f = field[it.key]
+                        val f = field[it]
                         if (f == null){
                             field.childs.add(it)
                         }else{

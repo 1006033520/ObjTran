@@ -63,8 +63,11 @@ open class TField(
         return false
     }
 
-    open operator fun get(key: String?): TField? {
-        return childs.findLast { it.key == key }
+    /**
+     * 获取子项与
+     */
+    open operator fun get(inField: TField): TField? {
+        return childs.findLast { it.equal(inField) }
     }
 
     /**
@@ -87,6 +90,9 @@ open class TField(
         write.merge(inField)
     }
 
+    /**
+     * 创建
+     */
     override fun create() {
         if (value == null && childs.isNotEmpty())
             write.create()

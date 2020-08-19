@@ -29,7 +29,7 @@ open class ObjectAdapter(val context: ObjTran) : AdapterInterFace {
                             var type = jfiled.type
                             if (filed is ObjectChildField && filed.genericTypes != null) {
                                 val t = filed.genericTypes[jfiled.genericType.typeName]
-                                type = t ?: jfiled.type
+                                type = t ?: type
                             }
                             type as Class<out Any>
                         }(),
